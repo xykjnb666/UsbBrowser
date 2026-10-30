@@ -38,10 +38,18 @@ jobs:
           yes | "$SDKMANAGER" --licenses
           "$SDKMANAGER" "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Fix libaums dependency version
+      - name: Fix Android dependencies
         working-directory: usbfinal
         run: |
+          echo "修复 libaums 依赖版本..."
           grep -RIl 'me.jahnen.libaums:core:0.9.0' app --include='*.gradle' --include='*.gradle.kts' | xargs -r sed -i 's/me.jahnen.libaums:core:0.9.0/me.jahnen.libaums:core:0.9.4/g'
+
+          echo "修复 Android 最低版本..."
+          grep -RIl 'minSdk = 23' app --include='*.gradle' --include='*.gradle.kts' | xargs -r sed -i 's/minSdk = 23/minSdk = 24/g'
+
+          echo "检查修改结果..."
+          grep -RIn 'minSdk' app --include='*.gradle' --include='*.gradle.kts'
+          grep -RIn 'libaums' app --include='*.gradle' --include='*.gradle.kts'
 
       - name: Build APK
         run: gradle --no-daemon -p usbfinal clean :app:assembleDebug
