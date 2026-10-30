@@ -38,6 +38,11 @@ jobs:
           yes | "$SDKMANAGER" --licenses
           "$SDKMANAGER" "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
+      - name: Fix libaums dependency version
+        working-directory: usbfinal
+        run: |
+          grep -RIl 'me.jahnen.libaums:core:0.9.0' app --include='*.gradle' --include='*.gradle.kts' | xargs -r sed -i 's/me.jahnen.libaums:core:0.9.0/me.jahnen.libaums:core:0.9.4/g'
+
       - name: Build APK
         run: gradle --no-daemon -p usbfinal clean :app:assembleDebug
 
