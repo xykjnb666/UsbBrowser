@@ -1,5 +1,4 @@
 
-
 name: Build Android APK
 
 on:
@@ -19,6 +18,9 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      - name: Extract project ZIP
+        run: unzip -o UsbBrowser-Final-CloudBuild.zip -d .
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -33,7 +35,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android SDK packages
+      - name: Install Android SDK
         run: |
           sdkmanager --install "platform-tools" "platforms;android-36" "build-tools;36.0.0"
 
